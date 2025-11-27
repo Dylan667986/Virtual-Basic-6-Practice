@@ -1,0 +1,178 @@
+Glossary
+VB6 語言基礎（語法 / 模組 / 執行模型）
+
+1. Module (.bas)
+像 Python 一個純函式的 .py 檔，但不能放 class。
+
+2. Form (.frm)
+有 UI 的物件，等於 PyQt/Tkinter 的 GUI Window。
+
+3. Class (.cls)
+類似 Python class，但語法很原始（無繼承）。
+
+4. Option Explicit
+強制變數必須先宣告，避免 typo；Python 沒這個。
+
+5. Sub
+沒有 return 的函式，相當於 Python “回傳 None”。
+
+6. Function
+有 return 的函式。
+
+7. ByVal
+傳值，相當於 Python 傳 immutable 值。
+
+8. ByRef
+傳址，相當於 Python 傳 mutable（可被呼叫端修改）。
+
+9. Dim
+宣告變數，VB6 一律靜態型別。
+
+10. Const
+編譯期常數，效率比變數好，不可改。
+
+11. Private / Public
+作用域控制；Private 只在模組內可用。
+
+12. Set / Let
+VB6 在「設定物件」時要用 Set，primitive 不用。
+
+13. & 字串串接
+等於 Python 的 + 或 f-string。
+
+14. Format$
+字串格式化，相當於 format() 或 f"{:.3f}".
+
+15. DoEvents
+讓事件迴圈跑一下，不然 UI 會卡死（Python 沒這東西）。
+
+MSComm（VB6 的序列通訊控制）
+
+16. MSComm 控制項
+VB6 內建 ActiveX 控制元件，用來開啟／讀寫 COM Port；等於 Python 的 pyserial.Serial()。
+
+17. CommPort
+對應 COMx，例如 1=COM1，3=COM3。
+
+18. Settings
+設定 baud rate、parity、data bits、stop bits。
+
+19. InputMode
+0=文字模式（string）
+1=二進位（ byte array ）。
+
+20. PortOpen
+True=開啟 COM Port；False=關閉。
+
+21. Output
+寫資料到 COM Port，等於 serial.write()。
+
+22. Input
+讀取 buffer，等於 serial.read_all()。
+
+23. InBufferCount
+等於 Python serial.in_waiting。
+
+24. InputLen
+設為 0 表示「每次讀全部」。
+
+25. InBufferSize
+RECV buffer 大小（通常 1024 bytes）。
+
+26. OutBufferSize
+SEND buffer 大小。
+
+27. RThreshold
+當接收資料量 >= 此值時觸發事件。
+
+28. SThreshold
+送出資料達某量時觸發事件；很少用。
+
+29. OnComm 事件
+MSComm 的事件 callback，像 async callback，但更原始。
+
+Serial / SCPI / 儀器相關
+
+30. SCPI（Standard Commands for Programmable Instruments）
+儀器標準命令，例如 VOLT 5, MEAS:CURR?；Python 用 VISA 時會常見。
+
+31. CRLF（vbCrLf）
+\r\n，儀器指令結尾；等於 Python 的 b"\r\n"。
+
+32. Query 指令 (?)
+帶問號會要求儀器回傳資料，如 *IDN?。
+
+33. Timeout Loop
+用 Timer 做等候迴圈；等於 Python while loop + timeout。
+
+34. Timer
+回傳秒數（單精度浮點），精度不高。
+
+35. Baud Rate
+例如 9600/115200，通訊速率。
+
+36. Parity (N/E/O)
+None, Even, Odd。
+
+37. Data Bits
+常用 7 或 8 bits。
+
+38. Stop Bits
+通常 1 或 2。
+
+儀器測試常用詞
+
+39. Electronic Load（電子負載）
+模擬電流消耗，用於 PSU 測試；會用到 CC/CR/CP 模式。
+
+40. DMM（Digital Multimeter）
+萬用電錶；可讀電壓/電流。
+
+41. Oscilloscope（示波器）
+量波形，可能會把量測整合到自動化（但 VB6 系統通常很簡陋）。
+
+42. PSU（Power Supply Unit）
+可程式化電源供應器，例如 Chroma/Keysight。
+
+43. Relay / Output On/Off
+控制 PSU 輸出開關。
+
+44. Query Response Parsing
+從字串裡取出數字，例如 "12.050\n" → 12.05（Val() 做這件事）。
+
+45. Buffer Overflow
+MSComm 緩衝區太小會丟資料（在 Python 幾乎不會遇到）。
+
+46. Blocking I/O
+MSComm 讀取是 blocking，會卡住 UI，需小心。
+
+VB6 特色（Python 沒遇過）
+
+47. ActiveX 控制元件 (.OCX)
+VB6 不用 import library，直接拖拉控制項進表單即可使用。
+
+48. COM 介面（Component Object Model）
+VB6 所有東西都是 COM 物件，像 Win32 的老 API 模型。
+
+49. 應用程式凍結問題
+VB6 若用 While Loop 不加 DoEvents，整個 UI 會死掉。
+
+50. 事件驅動模式（Event-Driven）
+VB6 Form/Control 透過事件（Click、OnComm）驅動邏輯。
+
+Python 工程師最該理解的總結
+
+VB6 的 MSComm = Python 的 pyserial，但符合 1998 年的開發方式。
+你主要要懂：
+
+MSComm 只是 serial 通訊物件（跟 pyserial 很像）
+
+VB6 不用 import，控制項加進專案就能用
+
+SCPI 指令一樣是 ASCII string
+
+Timeout 用 Timer（很原始）
+
+Input/Output 就等於 read/write
+
+UI 可能會被 blocking code 卡死（加 DoEvents）
